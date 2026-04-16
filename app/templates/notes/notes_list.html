@@ -1,6 +1,6 @@
 <!-- COLUMN 1: Notes List -->
 <div
-    class="w-[350px] min-w-[350px] max-w-[350px] flex-none border-r border-border-subtle flex flex-col relative overflow-hidden">
+    class="w-[350px] min-w-[350px] max-w-[350px] flex-none border-r border-border-subtle flex flex-col relative overflow-hidden h-full">
 
     <!-- Subtle background matching other pages -->
     <div class="absolute inset-0 -z-10 bg-bg-page pointer-events-none"
@@ -34,7 +34,7 @@
     </div>
 
     <!-- Notes list container -->
-    <div id="notes-list" class="flex-1 overflow-y-auto">
+    <div id="notes-list" class="flex-1 overflow-y-auto min-h-0">
         {% if grouped_notes %}
         <nav class="flex flex-col text-overflow-ellipsis pb-4">
             {% for group_key, group_notes in grouped_notes.items() %}
@@ -53,8 +53,13 @@
                     <a href="{{ url_for('notes.dashboard', task='preview', note_id=note.id) }}" class="text-initial">
                         <div role="button"
                             class="w-full p-3 transition-all hover:bg-brand-subtle focus:bg-brand-subtle active:bg-brand-subtle cursor-pointer overflow-hidden rounded-lg {% if note.id == selected_note_id %}bg-brand-subtle border-l-3 border-text-heading{% endif %}">
-                            <div class="text-[10px] text-text-muted font-light mb-1">
+                            <div class="text-[10px] text-text-muted font-light mb-1 flex items-center gap-1">
                                 {{ note.updated_at|human_readable_date }}
+                                {% if note.is_pinned %}
+                                <svg class="w-2.5 h-2.5 fill-brand text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                </svg>
+                                {% endif %}
                             </div>
                             <h6 class="text-text-heading font-medium text-sm truncate">
                                 {{ note.title if note.title else 'Untitled note' }}
