@@ -18,6 +18,13 @@ def create_app(config_class=Config):
     # Load configuration from the config class
     app.config.from_object(config_class)
 
+    # Ensure the instance folder exists
+    import os
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
+
     # Bind extensions to app instance
     db.init_app(app)
     migrate.init_app(app, db)

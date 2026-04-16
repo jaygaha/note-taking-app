@@ -20,7 +20,14 @@ def dashboard():
     
     # Group notes by date
     grouped_notes = {}
-    for n in notes:
+    
+    pinned_notes = [n for n in notes if n.is_pinned]
+    unpinned_notes = [n for n in notes if not n.is_pinned]
+    
+    if pinned_notes:
+        grouped_notes["Pinned"] = pinned_notes
+        
+    for n in unpinned_notes:
         dt = n.updated_at
         if dt.tzinfo is None:
             dt = dt.replace(tzinfo=timezone.utc)
@@ -149,3 +156,18 @@ def delete(note_id):
     db.session.commit()
     flash('Note deleted successfully', 'success')
     return redirect(url_for('notes.dashboard'))
+
+@notes_bp.route('/pin/<int:note_id>', methods=['POST'])
+@login_required
+def pin(note_id):
+    note = Note.query.get_or_404(note_id)
+    if note.author != current_user:
+        from flask import abort
+        abort(403)
+        
+    note.is_pinned = not note.is_pinned
+    db.session.commit()
+    
+    status = "pinned" if note.is_pinned else "unpinned"
+    flash(f'Note {status} successfully', 'success')
+    return redirect(url_for('notes.dashboard', note_id=note.id, task=request.args.get('task', 'preview')))

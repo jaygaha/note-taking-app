@@ -71,6 +71,7 @@ class Note(TimestampMixin, SoftDeleteMixin, db.Model):
     title: Mapped[str] = mapped_column(String(256), nullable=False)
     content: Mapped[str] = mapped_column(db.Text, nullable=False)
     user_id: Mapped[int] = mapped_column(db.ForeignKey("users.id"), index=True)
+    is_pinned: Mapped[bool] = mapped_column(db.Boolean, default=False, server_default="0", nullable=False)
     
     # Relationships: One note belongs to one user
     # back_populates ensures both sides of the relationship are aware of each other
