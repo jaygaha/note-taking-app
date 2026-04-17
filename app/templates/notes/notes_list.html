@@ -15,12 +15,22 @@
         class="px-5 py-3 border-b border-border-subtle flex items-center justify-between sticky top-0 z-10 bg-bg-page/60 backdrop-blur-md">
         <div class="flex items-center">
             <div class="relative inline-flex items-center">
+                {% if q %}
+                <div id="list-header" class="font-semibold text-sm text-text-heading">
+                    Results for "{{ q }}"
+                </div>
+                {% else %}
                 <div id="list-header" class="font-semibold text-sm text-text-heading">All Notes</div>
+                {% endif %}
                 <div id="note-count"
                     class="absolute -top-1.5 -right-3 flex items-center justify-center min-w-[18px] h-[18px] px-1.5 text-error text-[10px] font-bold">
                     {{ notes|length }}
                 </div>
             </div>
+            {% if q %}
+            <a href="{{ url_for('notes.dashboard') }}"
+                class="ml-4 text-xs font-medium text-brand hover:underline">Clear</a>
+            {% endif %}
         </div>
 
         <div class="flex items-center gap-x-2">
@@ -56,8 +66,10 @@
                             <div class="text-[10px] text-text-muted font-light mb-1 flex items-center gap-1">
                                 {{ note.updated_at|human_readable_date }}
                                 {% if note.is_pinned %}
-                                <svg class="w-2.5 h-2.5 fill-brand text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                <svg width="12" height="12" class="w-2.5 h-2.5 fill-brand text-brand" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                                 </svg>
                                 {% endif %}
                             </div>

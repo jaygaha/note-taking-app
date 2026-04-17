@@ -57,6 +57,19 @@
 
         {% block content %}{% endblock %}
     </main>
+
+    <script>
+        // Use Cmd+K or Ctrl+K to focus search input
+        document.addEventListener('keydown', function(e) {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                const searchInput = document.getElementById('search-input');
+                if (searchInput) {
+                    searchInput.focus();
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>
