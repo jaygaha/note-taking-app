@@ -10,10 +10,16 @@ from datetime import datetime, timezone
 @notes_bp.route('/')
 @login_required
 def dashboard():
-    # Only fetch notes where deleted_at is None (Soft Delete logic)
-    notes = [n for n in current_user.notes if not n.is_deleted]
-    # Sort by updated_at descending
-    notes.sort(key=lambda x: x.updated_at, reverse=True)
+    # Process search query if present
+    q = request.args.get('q', '').strip()
+    query = Note.query.filter_by(user_id=current_user.id).filter(Note.deleted_at.is_(None))
+    
+    if q:
+        search_term = f"%{q}%"
+        query = query.filter(Note.title.ilike(search_term) | Note.content.ilike(search_term))
+        
+    # Get notes sorted by update time
+    notes = query.order_by(Note.updated_at.desc()).all()
 
     from datetime import datetime, timezone
     now = datetime.now(timezone.utc)
@@ -108,7 +114,8 @@ def dashboard():
         form=form,
         note=note,
         selected_note_id=selected_note_id,
-        task=task
+        task=task,
+        q=q
     )
 
 @notes_bp.route('/save', methods=['POST', 'PUT'])
