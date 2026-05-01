@@ -1,35 +1,86 @@
 import markdown
-import bleach
+import nh3
 from markupsafe import Markup
 from datetime import datetime, timezone
 import re
 
-def md_to_html(text):
+def md_to_html(text: str) -> Markup:
+    """
+    Convert Markdown to sanitized HTML using pymdown-extensions.
+    Full GitHub-flavored support + single newlines → <br>.
+    """
     if not text:
-        return ""
-    
-    # Replace blank lines with <br>
-    text = re.sub(r'\n\s*\n', '\n\n&nbsp;\n\n', text)
+        return Markup("")
 
-    # Convert Markdown to HTML
+    # === PyMdown Extensions ===
     extensions = [
-        'extra', 
-        'fenced_code', 
-        'codehilite', 
-        'nl2br'
+        "nl2br",                    # Single newline → <br>
+        "tables",
+        "toc",                      # Table of Contents
+        "attr_list",                # {.class #id}
+        "footnotes",
+
+        # PyMdown extensions
+        "pymdownx.highlight",       # Syntax highlighting
+        "pymdownx.superfences",     # Advanced code blocks
+        "pymdownx.tasklist",        # - [x] Checkboxes
+        "pymdownx.tilde",           # ~~strikethrough~~ and ~subscript~
+        "pymdownx.magiclink",       # Auto-link URLs/emails
+        "pymdownx.betterem",        # Improved **bold** and _italic_
     ]
-    # 'extra' enables tables, footnotes, and abbreviations
-    # 'fenced_code' enables triple-backtick code blocks
-    html = markdown.markdown(text, extensions=extensions)
-    
-    # Sanitize HTML (Allow only safe tags)
-    allowed_tags = [
-        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'br', 'strong', 'em', 
-        'ul', 'ol', 'li', 'code', 'pre', 'blockquote', 'hr'
-    ]
-    cleaned_html = bleach.clean(html, tags=allowed_tags)
-    
-    # Mark as safe for Jinja2 rendering
+
+    extension_configs = {
+        "pymdownx.highlight": {
+            "css_class": "highlight",
+            "linenums": False,          # Change to True for line numbers
+        },
+        "pymdownx.tasklist": {
+            "custom_checkbox": True,
+        },
+        "pymdownx.superfences": {
+            "disable_indented_code_blocks": True,
+        },
+        "pymdownx.tilde": {
+            "subscript": False,         # Set True if you want ~subscript~
+        },
+    }
+
+    html = markdown.markdown(
+        text,
+        extensions=extensions,
+        extension_configs=extension_configs,
+        output_format="html5",
+    )
+
+    # === Sanitization ===
+    allowed_tags = {
+        "h1", "h2", "h3", "h4", "h5", "h6",
+        "p", "br", "strong", "em", "del", "ins",
+        "ul", "ol", "li",
+        "blockquote", "hr",
+        "code", "pre",
+        "table", "thead", "tbody", "tr", "th", "td",
+        "a", "img",
+        "span", "div", "sup", "sub", "details", "summary",
+        "input",                    # Task list checkboxes
+    }
+
+    allowed_attrs = {
+        "*": {"class", "id", "title"},
+        "a": {"href", "title", "target"},
+        "img": {"src", "alt", "title", "width", "height"},
+        "th": {"align"},
+        "td": {"align"},
+        "input": {"type", "checked", "disabled"},
+    }
+
+    cleaned_html = nh3.clean(
+        html,
+        tags=allowed_tags,
+        attributes=allowed_attrs,
+        link_rel="noopener noreferrer",
+    )
+
     return Markup(cleaned_html)
 
 def human_readable_date(date_str):
