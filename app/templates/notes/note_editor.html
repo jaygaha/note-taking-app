@@ -1,5 +1,5 @@
 <!-- COLUMN 2: Editor / Preview -->
-<div class="flex-1 flex flex-col bg-bg-surface min-w-0">
+<div class="flex-1 flex flex-col bg-bg-surface min-w-0 overflow-hidden">
 
     {% if welcome_card %}
     <!-- Empty state (shown when no note selected) -->
@@ -175,7 +175,7 @@
         <div class="flex-1 p-8 overflow-y-auto min-h-0">
             <h1 class="text-4xl font-light text-text-heading mb-6">{{ note.title if note.title else 'Untitled note' }}
             </h1>
-            <div class="prose prose-slate max-w-none text-text-body leading-relaxed text-base prose-p:my-4">
+            <div class="markdown-body">
                 {{ note.content|markdown if note.content else 'Edit this note...' }}
             </div>
         </div>
