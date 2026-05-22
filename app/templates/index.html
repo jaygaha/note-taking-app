@@ -26,6 +26,11 @@
                     title="Open Dashboard">
                     Open Dashboard
                 </a>
+                <a href="{{ url_for('notes.dashboard', task='new') }}" title="New note"
+                    class="px-6 py-3.5 rounded-sm bg-white ring-1 ring-border-subtle text-text-heading text-sm font-medium hover:bg-bg-page active:scale-95 transition-all shadow-sm">
+                    + New Note
+                </a>
+
                 {% else %}
                 <a href="{{ url_for('auth.register') }}"
                     class="px-6 py-3.5 rounded-sm bg-text-heading text-bg-page text-sm font-medium hover:opacity-90 active:scale-95 transition-all shadow-md"

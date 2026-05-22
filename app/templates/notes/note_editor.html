@@ -85,7 +85,9 @@
             <div class="text-[11px] flex items-center font-medium">
                 {% if note %}
                 <a href="{{ url_for('notes.dashboard', task='preview', note_id=note.id) }}"
-                    class="flex items-center gap-x-1.5 text-xs font-medium hover:text-text-heading transition-colors px-3 py-1.5 rounded-sm hover:bg-bg-page">
+                    id="preview-btn"
+                    class="flex items-center gap-x-1.5 text-xs font-medium hover:text-text-heading transition-colors px-3 py-1.5 rounded-sm hover:bg-bg-page"
+                    onclick="return handlePreviewClick(event, this.href)">
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -183,3 +185,44 @@
     {% endif %}
     {% endif %}
 </div>
+
+{% if task == 'edit' or task == 'new' %}
+<script>
+    (function () {
+        let isDirty = false;
+
+        // Track changes on title and content fields
+        const titleField = document.getElementById('title');
+        const contentField = document.getElementById('content');
+        const editorForm = document.querySelector('#editor-area form');
+
+        function markDirty() {
+            isDirty = true;
+        }
+
+        if (titleField) titleField.addEventListener('input', markDirty);
+        if (contentField) contentField.addEventListener('input', markDirty);
+
+        // Reset dirty flag when the form is submitted (i.e. saved)
+        if (editorForm) {
+            editorForm.addEventListener('submit', function () {
+                isDirty = false;
+            });
+        }
+
+        // Guard function called by the Preview button
+        window.handlePreviewClick = function (event, href) {
+            if (isDirty) {
+                event.preventDefault();
+                const proceed = confirm('You have unsaved changes. If you proceed to Preview, your changes will be lost.\n\nDo you want to continue?');
+                if (proceed) {
+                    isDirty = false;
+                    window.location.href = href;
+                }
+                return false;
+            }
+            return true;
+        };
+    })();
+</script>
+{% endif %}
