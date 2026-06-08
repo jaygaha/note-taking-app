@@ -29,6 +29,7 @@
             {% if greeting %}
             <span class="text-text-body hidden md:inline-block">{{ greeting }}</span>
             {% endif %}
+            <a href="{{ url_for('auth.change_password') }}" class="hover:text-text-heading transition-colors">Change Password</a>
             <a href="{{ url_for('auth.logout') }}" class="hover:text-text-heading transition-colors">Logout</a>
             {% endif %}
         </div>

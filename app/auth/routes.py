@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
 from app import db
 from app.auth import auth_bp
-from app.auth.forms import RegistrationForm, LoginForm
+from app.auth.forms import RegistrationForm, LoginForm, ChangePasswordForm
 from app.models import User
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
@@ -54,4 +54,18 @@ def logout():
     logout_user()
     flash('You have been logged out.', 'info')
     return redirect(url_for('auth.login'))
+
+@auth_bp.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        if current_user.check_password(form.old_password.data):
+            current_user.set_password(form.password.data)
+            db.session.commit()
+            flash('Your password has been updated.', 'success')
+            return redirect(url_for('notes.dashboard'))
+        else:
+            flash('Invalid current password.', 'danger')
+    return render_template('auth/change_password.html', title='Change Password', form=form)
 

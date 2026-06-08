@@ -31,13 +31,11 @@
 
     <main class="flex-1 flex flex-col w-full h-full relative z-10 min-h-0">
         <!-- Flash Messages -->
-        <!-- SHOW IF USER IS NOT LOGGED IN -->
-        {% if not current_user.is_authenticated %}
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         <div class="fixed top-24 right-6 z-[100] flex flex-col gap-3 w-full max-w-sm pointer-events-none">
             {% for category, message in messages %}
-            <div class="pointer-events-auto p-4 rounded-xl shadow-lg border backdrop-blur-xl animate-in slide-in-from-right-8 fade-in duration-500
+            <div class="flash-message pointer-events-auto p-4 rounded-xl shadow-lg border backdrop-blur-xl animate-in slide-in-from-right-8 fade-in duration-500 transition-all duration-500
                         {% if category in ['danger', 'error'] %}
                             bg-error-light/60 border-error/20 text-error
                         {% elif category == 'success' %}
@@ -53,12 +51,25 @@
         </div>
         {% endif %}
         {% endwith %}
-        {% endif %}
 
         {% block content %}{% endblock %}
     </main>
 
     <script>
+        // Auto-hide flash messages after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(function(message) {
+                setTimeout(function() {
+                    message.style.opacity = '0';
+                    message.style.transform = 'translateX(20px)';
+                    setTimeout(function() {
+                        message.remove();
+                    }, 500); // Wait for fade out animation to finish
+                }, 5000); // 5 seconds
+            });
+        });
+
         // Use Cmd+K or Ctrl+K to focus search input
         document.addEventListener('keydown', function(e) {
             if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
