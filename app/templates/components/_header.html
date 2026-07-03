@@ -1,37 +1,29 @@
-<nav class="w-full bg-bg-page/80 backdrop-blur-md sticky top-0 z-50 border-b border-border-subtle transition-all">
-    <div class="{{ 'w-full' if full_width_header else 'max-w-6xl' }} mx-auto px-6 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-x-3 w-1/3">
-            <div class="w-5 h-5 bg-brand rounded shadow-sm"></div>
-            <a href="/" class="text-lg font-bold tracking-tight text-text-heading hover:opacity-80 transition-opacity"
-                title="NoteTakingApp">
-                NoteTakingApp.
-            </a>
-        </div>
+<header class="w-full bg-bg-surface border-b border-border-subtle">
+    <div class="max-w-6xl mx-auto px-5 sm:px-6 h-[52px] flex items-center justify-between">
+        <a href="{{ url_for('notes.dashboard') if current_user.is_authenticated else url_for('main.index') }}"
+            class="flex items-center gap-2 text-[15px] font-semibold text-text-heading hover:opacity-80 transition-opacity"
+            title="NoteTakingApp">
+            <span class="w-5 h-5 rounded-md bg-accent flex items-center justify-center" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1D1D1F" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h4m-7 5h10a2 2 0 002-2V7a2 2 0 00-2-2h-2.5L11 2.5 8.5 5H6a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+            </span>
+            NoteTakingApp
+        </a>
 
-        {% if current_user.is_authenticated %}
-        <div class="flex-1 flex justify-center max-w-lg px-4 hidden sm:flex">
-            <form action="{{ url_for('notes.dashboard') }}" method="GET" class="relative w-full group">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-4 h-4 text-text-muted group-focus-within:text-brand transition-colors"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                </div>
-                <input type="text" name="q" id="search-input" value="{{ q or '' }}" placeholder="Search notes..." class="w-full bg-bg-surface/50 border border-border-subtle rounded-md pl-9 pr-4 py-1.5 text-sm text-text-body focus:outline-none focus:bg-bg-surface focus:border-brand/40 focus:ring-2 focus:ring-brand/20 placeholder:text-text-muted/60 transition-all shadow-sm">
-                <div class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
-                    <kbd class="hidden lg:inline-block border border-border-subtle rounded px-1.5 text-[10px] font-sans font-medium text-text-muted bg-bg-page select-none">⌘K</kbd>
-                </div>
-            </form>
-        </div>
-        {% else %}
-        <div class="flex-1 hidden sm:block"></div>
-        {% endif %}
-
-        <div class="flex items-center justify-end gap-x-6 text-sm font-medium text-text-muted w-1/3">
+        <nav class="flex items-center gap-x-3 sm:gap-x-5 text-sm font-medium text-text-muted" aria-label="Account">
+            {% with extra_class = "w-8 h-8 rounded-full flex items-center justify-center text-text-muted hover:text-text-heading hover:bg-bg-sunken transition-colors" %}
+            {% include 'components/_theme_toggle.html' %}
+            {% endwith %}
             {% if current_user.is_authenticated %}
-            {% if greeting %}
-            <span class="text-text-body hidden md:inline-block">{{ greeting }}</span>
-            {% endif %}
+            <a href="{{ url_for('notes.dashboard') }}" class="hover:text-text-heading transition-colors">Notes</a>
             <a href="{{ url_for('auth.change_password') }}" class="hover:text-text-heading transition-colors">Change Password</a>
-            <a href="{{ url_for('auth.logout') }}" class="hover:text-text-heading transition-colors">Logout</a>
+            <a href="{{ url_for('auth.logout') }}" class="hover:text-text-heading transition-colors">Log Out</a>
+            {% else %}
+            <a href="{{ url_for('auth.login') }}" class="hover:text-text-heading transition-colors">Log In</a>
+            <a href="{{ url_for('auth.register') }}"
+                class="px-3.5 py-1.5 rounded-md bg-text-heading text-bg-surface hover:opacity-90 active:scale-[0.98] transition-all">Sign Up</a>
             {% endif %}
-        </div>
+        </nav>
     </div>
-</nav>
+</header>

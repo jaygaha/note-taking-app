@@ -104,11 +104,11 @@ def dashboard():
     print(f"task: {task}, note_id: {note_id}, welcome_card: {welcome_card}")
 
     return render_template(
-        'notes/dashboard.html', 
-        notes=notes, 
+        'notes/dashboard.html',
+        notes=notes,
         grouped_notes=grouped_notes,
-        title=title, 
-        full_width_header=True, 
+        title=title,
+        app_shell=True,
         greeting=greeting,
         welcome_card=welcome_card,
         form=form,

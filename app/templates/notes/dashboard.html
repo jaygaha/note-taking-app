@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="flex flex-1 overflow-hidden h-[calc(100vh-61px)] min-h-0">
+<div class="flex flex-1 min-h-0 overflow-hidden" data-pane="{{ 'list' if welcome_card else 'editor' }}">
     {% include 'notes/notes_list.html' %}
     {% include 'notes/note_editor.html' %}
 </div>

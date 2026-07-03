@@ -5,47 +5,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }} - NoteTakingApp</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        // Set the theme before first paint so there's no flash of the wrong palette.
+        (function () {
+            try {
+                var stored = localStorage.getItem('theme');
+                var theme = stored === 'light' || stored === 'dark'
+                    ? stored
+                    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {}
+        })();
+    </script>
     <link rel="stylesheet" href="{{ url_for('static', filename='dist/output.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
 </head>
 
 <body
-    class="bg-bg-page text-text-body antialiased flex flex-col min-h-screen selection:bg-brand-subtle selection:text-text-heading relative z-0">
-    <!-- Subtle Background Grid & Gradient -->
-    <div class="fixed inset-0 -z-10 h-full w-full bg-bg-page pointer-events-none"
-        style="background-image: radial-gradient(var(--color-border-subtle) 1px, transparent 1px); background-size: 24px 24px;">
-    </div>
-    <div
-        class="fixed inset-0 -z-10 h-full w-full bg-gradient-to-br from-bg-surface via-transparent to-brand-subtle opacity-40 pointer-events-none">
-    </div>
+    class="{% if app_shell %}h-dvh overflow-hidden{% else %}min-h-screen{% endif %} font-sans bg-bg-page text-text-body antialiased flex flex-col selection:bg-accent-subtle selection:text-text-heading">
 
+    {% if not app_shell %}
     {% include 'components/_header.html' %}
+    {% endif %}
 
-    <main class="flex-1 flex flex-col w-full h-full relative z-10 min-h-0">
+    <main class="flex-1 flex flex-col w-full min-h-0 relative">
         <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-        <div class="fixed top-24 right-6 z-[100] flex flex-col gap-3 w-full max-w-sm pointer-events-none">
+        <div class="fixed bottom-6 right-4 sm:right-6 z-[100] flex flex-col-reverse gap-2.5 w-[calc(100%-2rem)] max-w-sm pointer-events-none">
             {% for category, message in messages %}
-            <div class="flash-message pointer-events-auto p-4 rounded-xl shadow-lg border backdrop-blur-xl animate-in slide-in-from-right-8 fade-in duration-500 transition-all duration-500
+            <div role="status" class="flash-message pointer-events-auto p-3.5 rounded-lg shadow-md border text-sm font-medium transition-all duration-500
                         {% if category in ['danger', 'error'] %}
-                            bg-error-light/60 border-error/20 text-error
+                            bg-error-light border-error/20 text-error
                         {% elif category == 'success' %}
-                            bg-success-light/60 border-success/20 text-success
+                            bg-success-light border-success/20 text-success
                         {% else %}
-                            bg-white/80 border-border-subtle text-text-heading
+                            bg-bg-surface border-border-subtle text-text-heading
                         {% endif %}">
-                <div class="flex items-start">
-                    <p class="text-sm font-semibold">{{ message }}</p>
-                </div>
+                {{ message }}
             </div>
             {% endfor %}
         </div>
@@ -79,6 +76,42 @@
                     searchInput.focus();
                 }
             }
+        });
+
+        // Close any open <details class="dropdown"> (e.g. account menu) on outside click.
+        // Scoped to .dropdown only — the notes-list category toggles are plain <details>
+        // and must stay independent of each other and of this listener.
+        document.addEventListener('click', function(e) {
+            document.querySelectorAll('details.dropdown[open]').forEach(function(details) {
+                if (!details.contains(e.target)) {
+                    details.removeAttribute('open');
+                }
+            });
+        });
+
+        // Light/dark theme toggle — persists the visitor's explicit choice,
+        // overriding the system preference in either direction (see input.css).
+        function syncThemeToggleLabels(theme) {
+            var label = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+            document.querySelectorAll('.theme-toggle').forEach(function(btn) {
+                btn.setAttribute('aria-label', label);
+                btn.setAttribute('title', label);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+            syncThemeToggleLabels(current);
+        });
+
+        document.addEventListener('click', function(e) {
+            var toggle = e.target.closest('.theme-toggle');
+            if (!toggle) return;
+            var current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+            var next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            try { localStorage.setItem('theme', next); } catch (e) {}
+            syncThemeToggleLabels(next);
         });
     </script>
 </body>
