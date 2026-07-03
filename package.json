@@ -1,0 +1,27 @@
+{
+  "name": "note-taking-app",
+  "version": "1.0.0",
+  "description": "A note-taking application built with **Flask** and **Tailwind CSS**. NoteTakingApp offers a clean interface for capturing ideas, organizing thoughts, and managing your daily tasks with ease.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tailwindcss -i app/static/src/input.css -o app/static/dist/output.css --minify",
+    "watch": "tailwindcss -i app/static/src/input.css -o app/static/dist/output.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaygaha/note-taking-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jaygaha/note-taking-app/issues"
+  },
+  "homepage": "https://github.com/jaygaha/note-taking-app#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.2",
+    "tailwindcss": "^4.2.2"
+  }
+}

@@ -6,16 +6,16 @@
 }
 
 @theme {
-    /* BRAND */
-    --color-brand: #64748b;
-    --color-brand-dark: #4e5e74;
-    --color-brand-light: #92a3bb;
-    --color-brand-subtle: rgb(100 116 139 / 0.1);
+    /* BRAND — warm amber, text-safe (links, focus, small accents) */
+    --color-brand: #8A5A00;
+    --color-brand-dark: #6B4600;
+    --color-brand-light: #C89232;
+    --color-brand-subtle: rgb(138 90 0 / 0.08);
     --color-brand-foreground: #ffffff;
 
-    /* ACCENT */
-    --color-accent: #64748b;
-    --color-accent-subtle: rgb(100 116 139 / 0.1);
+    /* ACCENT — vivid gold, decorative only (pin glyph, selection tint) */
+    --color-accent: #FFCC00;
+    --color-accent-subtle: rgb(255 204 0 / 0.18);
 
     /* NEUTRAL */
     --color-neutral-50: #fafafa;
@@ -30,70 +30,278 @@
     --color-neutral-900: #0c0d0d;
 
     /* TEXT */
-    --color-text-heading: #0c0d0d;
-    --color-text-body: #3a3b3b;
-    --color-text-muted: #6c6c6c;
+    --color-text-heading: #1D1D1F;
+    --color-text-body: #3A3A3C;
+    --color-text-muted: #6E6E73;
+    --color-text-faint: #AEAEB2;
     --color-text-inverse: #ffffff;
-    --color-text-link: #64748b;
+    --color-text-link: #8A5A00;
 
     /* BACKGROUND */
-    --color-bg-page: #fafafa;
+    --color-bg-page: #F7F7F8;
     --color-bg-surface: #ffffff;
-    --color-bg-elevated: #fcfcfc;
-    --color-bg-sunken: #dcdcdc;
+    --color-bg-elevated: #ffffff;
+    --color-bg-sunken: #ECECEE;
+    --color-bg-selected: rgb(255 204 0 / 0.18);
 
     /* BORDER */
-    --color-border: #bfbfbf;
-    --color-border-strong: #a2a2a2;
-    --color-border-subtle: #dcdcdc;
-    --color-border-focus: #64748b;
+    --color-border: #D1D1D6;
+    --color-border-strong: #AEAEB2;
+    --color-border-subtle: #E5E5EA;
+    --color-border-focus: #8A5A00;
 
     /* STATUS */
-    --color-success: #10b981;
-    --color-success-light: #d1fae5;
-    --color-warning: #f59e0b;
-    --color-warning-light: #fef3c7;
-    --color-error: #ef4444;
-    --color-error-light: #fee2e2;
+    --color-success: #1F7A38;
+    --color-success-light: #E5F5E9;
+    --color-warning: #966000;
+    --color-warning-light: #FBF0D9;
+    --color-error: #D70015;
+    --color-error-light: #FBE3E6;
     --color-info: #3b82f6;
     --color-info-light: #dbeafe;
 
     /* GRADIENTS */
-    --gradient-brand: linear-gradient(135deg, #4e5e74 0%, #64748b 100%);
-    --gradient-accent: linear-gradient(135deg, #64748b 0%, #92a3bb 100%);
-    --gradient-hero: linear-gradient(135deg, #4e5e74 0%, #64748b 50%, #64748b 100%);
+    --gradient-brand: linear-gradient(135deg, #6B4600 0%, #8A5A00 100%);
+    --gradient-accent: linear-gradient(135deg, #8A5A00 0%, #C89232 100%);
+    --gradient-hero: linear-gradient(135deg, #6B4600 0%, #8A5A00 50%, #8A5A00 100%);
     --gradient-surface: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
     --gradient-card: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
 
-    /* SHADOWS */
-    --shadow-sm: 0 1px 3px rgb(18 24 33 / 0.1);
-    --shadow-md: 0 8px 24px rgb(18 24 33 / 0.1);
-    --shadow-lg: 0 20px 48px rgb(18 24 33 / 0.1);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-    --shadow-brand: 0 0 20px rgb(100 116 139 / 0.2);
+    /* SHADOWS — kept subtle; hairlines carry most of the separation */
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.04);
+    --shadow-md: 0 4px 16px rgb(0 0 0 / 0.06);
+    --shadow-lg: 0 16px 40px rgb(0 0 0 / 0.10);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.06);
+    --shadow-brand: 0 0 20px rgb(138 90 0 / 0.15);
 
     /* RADIUS */
     --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 24px;
-    --radius-2xl: 32px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --radius-2xl: 28px;
     --radius-full: 9999px;
 
     /* COMPONENT TOKENS (Semantic Aliases) */
-    --color-button-primary: var(--color-brand);
-    --color-button-primary-hover: var(--color-brand-dark);
-    --color-button-primary-text: var(--color-brand-foreground);
+    --color-button-primary: var(--color-text-heading);
+    --color-button-primary-hover: var(--color-text-body);
+    --color-button-primary-text: var(--color-bg-surface);
     --color-card-bg: var(--color-bg-surface);
     --color-card-border: var(--color-border-subtle);
     --color-input-bg: var(--color-bg-sunken);
-    --color-input-border: var(--color-border);
+    --color-input-border: var(--color-border-subtle);
     --color-input-focus: var(--color-border-focus);
 
     /* LAYOUT TOKENS */
     --container-width: 1280px;
     --section-padding: 80px;
     --card-padding: 24px;
+}
+
+/* ============================================================
+   Dark mode — mirrors macOS/iOS Notes' dark appearance.
+   Overriding the same custom properties (unlayered, so it wins
+   over Tailwind's @theme layer) keeps every utility class dark-aware
+   with no template changes required.
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-brand: #E8B923;
+        --color-brand-dark: #C79A12;
+        --color-brand-light: #F0CE5C;
+        --color-brand-subtle: rgb(232 185 35 / 0.12);
+
+        --color-accent: #FFD60A;
+        --color-accent-subtle: rgb(255 214 10 / 0.16);
+
+        --color-text-heading: #F5F5F7;
+        --color-text-body: #E5E5EA;
+        --color-text-muted: #8E8E93;
+        --color-text-faint: #6E6E73;
+        --color-text-inverse: #1D1D1F;
+        --color-text-link: #E8B923;
+
+        --color-bg-page: #151517;
+        --color-bg-surface: #1C1C1E;
+        --color-bg-elevated: #232325;
+        --color-bg-sunken: #2C2C2E;
+        --color-bg-selected: rgb(255 214 10 / 0.16);
+
+        --color-border: #3A3A3C;
+        --color-border-strong: #48484A;
+        --color-border-subtle: #303032;
+        --color-border-focus: #E8B923;
+
+        --color-success: #32D74B;
+        --color-success-light: rgb(50 215 75 / 0.12);
+        --color-warning: #E8B923;
+        --color-warning-light: rgb(232 185 35 / 0.12);
+        --color-error: #FF453A;
+        --color-error-light: rgb(255 69 58 / 0.12);
+    }
+}
+
+/* ============================================================
+   Manual theme toggle — a data-theme attribute on <html>, stamped by
+   theme-toggle.js, overrides the system preference in either direction.
+   Higher-specificity attribute selectors beat the plain :root rules
+   above regardless of source order, so this wins whichever way the
+   visitor picks; leaving the attribute unset falls back to the system
+   media query above (or plain light, with JS disabled).
+   ============================================================ */
+:root[data-theme="dark"] {
+    --color-brand: #E8B923;
+    --color-brand-dark: #C79A12;
+    --color-brand-light: #F0CE5C;
+    --color-brand-subtle: rgb(232 185 35 / 0.12);
+
+    --color-accent: #FFD60A;
+    --color-accent-subtle: rgb(255 214 10 / 0.16);
+
+    --color-text-heading: #F5F5F7;
+    --color-text-body: #E5E5EA;
+    --color-text-muted: #8E8E93;
+    --color-text-faint: #6E6E73;
+    --color-text-inverse: #1D1D1F;
+    --color-text-link: #E8B923;
+
+    --color-bg-page: #151517;
+    --color-bg-surface: #1C1C1E;
+    --color-bg-elevated: #232325;
+    --color-bg-sunken: #2C2C2E;
+    --color-bg-selected: rgb(255 214 10 / 0.16);
+
+    --color-border: #3A3A3C;
+    --color-border-strong: #48484A;
+    --color-border-subtle: #303032;
+    --color-border-focus: #E8B923;
+
+    --color-success: #32D74B;
+    --color-success-light: rgb(50 215 75 / 0.12);
+    --color-warning: #E8B923;
+    --color-warning-light: rgb(232 185 35 / 0.12);
+    --color-error: #FF453A;
+    --color-error-light: rgb(255 69 58 / 0.12);
+
+    color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+    --color-brand: #8A5A00;
+    --color-brand-dark: #6B4600;
+    --color-brand-light: #C89232;
+    --color-brand-subtle: rgb(138 90 0 / 0.08);
+
+    --color-accent: #FFCC00;
+    --color-accent-subtle: rgb(255 204 0 / 0.18);
+
+    --color-text-heading: #1D1D1F;
+    --color-text-body: #3A3A3C;
+    --color-text-muted: #6E6E73;
+    --color-text-faint: #AEAEB2;
+    --color-text-inverse: #ffffff;
+    --color-text-link: #8A5A00;
+
+    --color-bg-page: #F7F7F8;
+    --color-bg-surface: #ffffff;
+    --color-bg-elevated: #ffffff;
+    --color-bg-sunken: #ECECEE;
+    --color-bg-selected: rgb(255 204 0 / 0.18);
+
+    --color-border: #D1D1D6;
+    --color-border-strong: #AEAEB2;
+    --color-border-subtle: #E5E5EA;
+    --color-border-focus: #8A5A00;
+
+    --color-success: #1F7A38;
+    --color-success-light: #E5F5E9;
+    --color-warning: #966000;
+    --color-warning-light: #FBF0D9;
+    --color-error: #D70015;
+    --color-error-light: #FBE3E6;
+
+    color-scheme: light;
+}
+
+:root {
+    color-scheme: light dark;
+}
+
+/* ============================================================
+   Theme toggle button — icon swap driven purely by data-theme,
+   no JS needed beyond setting the attribute.
+   ============================================================ */
+.theme-toggle .icon-sun {
+    display: none;
+}
+
+.theme-toggle .icon-moon {
+    display: block;
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-sun {
+    display: block;
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-moon {
+    display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .theme-toggle .icon-sun {
+        display: block;
+    }
+
+    :root:not([data-theme="light"]) .theme-toggle .icon-moon {
+        display: none;
+    }
+}
+
+html,
+body {
+    height: 100%;
+}
+
+/* ============================================================
+   App shell — two-pane layout (Apple Notes minus the folder column)
+   ============================================================ */
+.pane-list,
+.pane-editor {
+    display: flex;
+}
+
+@media (max-width: 767px) {
+    [data-pane="editor"] .pane-list {
+        display: none;
+    }
+
+    [data-pane="list"] .pane-editor {
+        display: none;
+    }
+}
+
+/* ============================================================
+   Focus visibility — always show a clear keyboard focus ring
+   ============================================================ */
+:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }
 
 /* ============================================================
@@ -106,7 +314,7 @@
     word-break: break-word;
 }
 
-.markdown-body > * + * {
+.markdown-body>*+* {
     margin-top: 0.85em;
 }
 
@@ -123,12 +331,33 @@
     margin-top: 1.5em;
     margin-bottom: 0.5em;
 }
-.markdown-body h1 { font-size: 1.875rem; }
-.markdown-body h2 { font-size: 1.5rem; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 0.3em; }
-.markdown-body h3 { font-size: 1.25rem; }
-.markdown-body h4 { font-size: 1.1rem; }
-.markdown-body h5 { font-size: 1rem; }
-.markdown-body h6 { font-size: 0.9rem; color: var(--color-text-muted); }
+
+.markdown-body h1 {
+    font-size: 1.875rem;
+}
+
+.markdown-body h2 {
+    font-size: 1.5rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+    padding-bottom: 0.3em;
+}
+
+.markdown-body h3 {
+    font-size: 1.25rem;
+}
+
+.markdown-body h4 {
+    font-size: 1.1rem;
+}
+
+.markdown-body h5 {
+    font-size: 1rem;
+}
+
+.markdown-body h6 {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
 
 /* Paragraphs & line breaks */
 .markdown-body p {
@@ -137,11 +366,20 @@
 }
 
 /* Bold & Italic */
-.markdown-body strong { font-weight: 700; color: var(--color-text-heading); }
-.markdown-body em { font-style: italic; }
+.markdown-body strong {
+    font-weight: 700;
+    color: var(--color-text-heading);
+}
+
+.markdown-body em {
+    font-style: italic;
+}
 
 /* Strikethrough */
-.markdown-body del { text-decoration: line-through; color: var(--color-text-muted); }
+.markdown-body del {
+    text-decoration: line-through;
+    color: var(--color-text-muted);
+}
 
 /* Horizontal rule */
 .markdown-body hr {
@@ -156,7 +394,10 @@
     text-decoration: underline;
     text-underline-offset: 2px;
 }
-.markdown-body a:hover { color: var(--color-brand-dark); }
+
+.markdown-body a:hover {
+    color: var(--color-brand-dark);
+}
 
 /* Lists */
 .markdown-body ul,
@@ -165,14 +406,32 @@
     margin-top: 0.5em;
     margin-bottom: 0.5em;
 }
-.markdown-body ul { list-style-type: disc; }
-.markdown-body ol { list-style-type: decimal; }
-.markdown-body li { margin-top: 0.25em; margin-bottom: 0.25em; }
-.markdown-body li > ul,
-.markdown-body li > ol { margin-top: 0.25em; margin-bottom: 0.25em; }
+
+.markdown-body ul {
+    list-style-type: disc;
+}
+
+.markdown-body ol {
+    list-style-type: decimal;
+}
+
+.markdown-body li {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+}
+
+.markdown-body li>ul,
+.markdown-body li>ol {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+}
 
 /* Task list */
-.markdown-body .task-list-item { list-style: none; margin-left: -1.25em; }
+.markdown-body .task-list-item {
+    list-style: none;
+    margin-left: -1.25em;
+}
+
 .markdown-body .task-list-item input[type="checkbox"] {
     margin-right: 0.5em;
     accent-color: var(--color-brand);
@@ -188,7 +447,10 @@
     margin: 1em 0;
     font-style: italic;
 }
-.markdown-body blockquote > * + * { margin-top: 0.5em; }
+
+.markdown-body blockquote>*+* {
+    margin-top: 0.5em;
+}
 
 /* Inline code */
 .markdown-body code:not(pre code) {
@@ -213,6 +475,7 @@
     line-height: 1.6;
     margin: 1em 0;
 }
+
 .markdown-body pre code {
     background: none;
     border: none;
@@ -228,6 +491,7 @@
     margin: 1em 0;
     font-size: 0.9em;
 }
+
 .markdown-body th {
     background-color: var(--color-bg-page);
     color: var(--color-text-heading);
@@ -236,12 +500,16 @@
     padding: 0.6em 0.9em;
     border: 1px solid var(--color-border-subtle);
 }
+
 .markdown-body td {
     padding: 0.5em 0.9em;
     border: 1px solid var(--color-border-subtle);
     vertical-align: top;
 }
-.markdown-body tr:nth-child(even) { background-color: var(--color-bg-page); }
+
+.markdown-body tr:nth-child(even) {
+    background-color: var(--color-bg-page);
+}
 
 /* Images */
 .markdown-body img {

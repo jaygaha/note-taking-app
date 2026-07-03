@@ -1,7 +1,7 @@
 {% macro render_input(field, placeholder="") %}
     <div>
         {{ field.label(class="block text-sm font-medium text-text-body mb-1.5") }}
-        {{ field(class="block w-full px-4 py-3 bg-white/60 border border-border-subtle rounded-sm text-text-body placeholder-text-muted/60 focus:bg-white focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all sm:text-sm shadow-sm", placeholder=placeholder) }}
+        {{ field(class="block w-full px-4 py-3 bg-bg-sunken border border-border-subtle rounded-sm text-text-body placeholder-text-muted/60 focus:bg-bg-surface focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all sm:text-sm shadow-sm", placeholder=placeholder) }}
         {% for error in field.errors %}
             <p class="text-error text-xs font-medium mt-1.5">{{ error }}</p>
         {% endfor %}
@@ -16,7 +16,7 @@
                 <a href="#" class="text-xs font-medium text-text-muted hover:text-text-heading transition-colors">Forgot password?</a>
             {% endif %}
         </div>
-        {{ field(class="block w-full px-4 py-3 bg-white/60 border border-border-subtle rounded-sm text-text-body placeholder-text-muted/60 focus:bg-white focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all sm:text-sm shadow-sm", placeholder=placeholder) }}
+        {{ field(class="block w-full px-4 py-3 bg-bg-sunken border border-border-subtle rounded-sm text-text-body placeholder-text-muted/60 focus:bg-bg-surface focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all sm:text-sm shadow-sm", placeholder=placeholder) }}
         {% for error in field.errors %}
             <p class="text-error text-xs font-medium mt-1.5">{{ error }}</p>
         {% endfor %}
