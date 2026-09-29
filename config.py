@@ -8,3 +8,4 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL') or \
         'sqlite:///' + os.path.join(os.path.abspath(os.path.dirname(__file__)), 'instance', 'notes.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    DATE_IN_NEW_TITLE = os.getenv('DATE_IN_NEW_TITLE') or False

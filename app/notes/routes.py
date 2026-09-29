@@ -1,11 +1,27 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, Response, abort
 from flask_login import login_required, current_user
-from app import db
+from app import db, Config
 from app.notes import notes_bp
 from app.notes import forms
 from app.models import Note
 import random
+import re
+import io
+import zipfile
 from datetime import datetime, timezone
+
+
+def _note_filename(note, ext='md'):
+    """Build a filesystem-safe filename for a note, e.g. 'my-note-title-12.md'."""
+    slug = re.sub(r'[^a-z0-9]+', '-', (note.title or 'untitled-note').lower()).strip('-')
+    slug = slug or 'untitled-note'
+    return f"{slug}-{note.id}.{ext}"
+
+
+def _note_markdown(note):
+    """Render a note as a standalone Markdown document (title as H1 + content)."""
+    title = note.title or 'Untitled Note'
+    return f"# {title}\n\n{note.content or ''}"
 
 @notes_bp.route('/')
 @login_required
@@ -85,6 +101,10 @@ def dashboard():
     if task or note_id:
         welcome_card = False
 
+    # Date in new title flag
+    date_in_new_title = Config.DATE_IN_NEW_TITLE
+    new_title = f"{datetime.now(timezone.utc).strftime('%Y-%m-%d')} "
+
     # Request to create a new note
     if task == 'new':
         title = "New Note"
@@ -101,7 +121,8 @@ def dashboard():
     
 
     # debug
-    print(f"task: {task}, note_id: {note_id}, welcome_card: {welcome_card}")
+    if Config.APP_ENV == 'development':
+        print(f"task: {task}, note_id: {note_id}, welcome_card: {welcome_card}")
 
     return render_template(
         'notes/dashboard.html',
@@ -115,7 +136,8 @@ def dashboard():
         note=note,
         selected_note_id=selected_note_id,
         task=task,
-        q=q
+        q=q,
+        new_title=new_title if date_in_new_title else None
     )
 
 @notes_bp.route('/save', methods=['POST', 'PUT'])
@@ -169,12 +191,56 @@ def delete(note_id):
 def pin(note_id):
     note = Note.query.get_or_404(note_id)
     if note.author != current_user:
-        from flask import abort
         abort(403)
-        
+
     note.is_pinned = not note.is_pinned
     db.session.commit()
     
     status = "pinned" if note.is_pinned else "unpinned"
     flash(f'Note {status} successfully', 'success')
     return redirect(url_for('notes.dashboard', note_id=note.id, task=request.args.get('task', 'preview')))
+
+@notes_bp.route('/export/<int:note_id>')
+@login_required
+def export(note_id):
+    note = Note.query.get_or_404(note_id)
+    if note.author != current_user:
+        abort(403)
+
+    return Response(
+        _note_markdown(note),
+        mimetype='text/markdown',
+        headers={
+            'Content-Disposition': f'attachment; filename="{_note_filename(note)}"'
+        }
+    )
+
+@notes_bp.route('/export-all')
+@login_required
+def export_all():
+    notes = Note.query.filter_by(user_id=current_user.id).filter(Note.deleted_at.is_(None)).order_by(Note.title).all()
+
+    if not notes:
+        flash('You have no notes to export', 'danger')
+        return redirect(url_for('notes.dashboard'))
+
+    buffer = io.BytesIO()
+    used_names = set()
+    with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for note in notes:
+            filename = _note_filename(note)
+            # Guard against unlikely filename collisions within the archive
+            while filename in used_names:
+                filename = f"{filename.rsplit('.', 1)[0]}-copy.md"
+            used_names.add(filename)
+            zf.writestr(filename, _note_markdown(note))
+    buffer.seek(0)
+
+    timestamp = datetime.now(timezone.utc).strftime('%Y%m%d')
+    return Response(
+        buffer.getvalue(),
+        mimetype='application/zip',
+        headers={
+            'Content-Disposition': f'attachment; filename="notes-export-{timestamp}.zip"'
+        }
+    )

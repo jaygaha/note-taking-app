@@ -1,16 +1,26 @@
+import re
 import markdown
 import nh3
 from markupsafe import Markup
 from datetime import datetime, timezone
-import re
+from app import Config
+
+# Ensure tables preceded by text have a blank line for markdown parser compatibility
+_TABLE_NEEDS_BLANK = re.compile(
+    r'(^|\n)([ \t]*[^\n|: \t-][^\n]*)\n([ \t]*\|.+\|[^\n]*\n[ \t]*\|[\s:]*-)'
+)
+
+def _ensure_blank_before_tables(text: str) -> str:
+    """Insert a blank line before markdown tables if missing."""
+    text = text.replace('\r\n', '\n').replace('\r', '\n')
+    return _TABLE_NEEDS_BLANK.sub(r'\1\2\n\n\3', text)
 
 def md_to_html(text: str) -> Markup:
-    """
-    Convert Markdown to sanitized HTML using pymdown-extensions.
-    Full GitHub-flavored support + single newlines → <br>.
-    """
+    """Convert Markdown to sanitized HTML."""
     if not text:
         return Markup("")
+
+    text = _ensure_blank_before_tables(text)
 
     # === PyMdown Extensions ===
     extensions = [
@@ -69,8 +79,8 @@ def md_to_html(text: str) -> Markup:
         "*": {"class", "id", "title"},
         "a": {"href", "title", "target"},
         "img": {"src", "alt", "title", "width", "height"},
-        "th": {"align"},
-        "td": {"align"},
+        "th": {"align", "style"},
+        "td": {"align", "style"},
         "input": {"type", "checked", "disabled"},
     }
 
@@ -90,9 +100,10 @@ def human_readable_date(date_str):
     if date_str.tzinfo is None:
         date_str = date_str.replace(tzinfo=timezone.utc)
     diff = now - date_str
-    print(f"Now: {now}")
-    print(f"Date: {date_str}")
-    print(f"Diff: {diff}")
+    if Config.APP_ENV == 'development':
+        print(f"Now: {now}")
+        print(f"Date: {date_str}")
+        print(f"Diff: {diff}")
     
     seconds = diff.total_seconds()
     minutes = int(seconds // 60)
