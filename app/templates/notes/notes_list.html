@@ -1,12 +1,24 @@
 <!-- COLUMN 1: Notes list -->
-<div class="pane-list w-full md:w-[320px] md:min-w-[320px] md:max-w-[320px] flex-none flex-col md:border-r border-border-subtle bg-bg-page h-full min-h-0">
+<div
+    class="pane-list w-full md:w-[320px] md:min-w-[320px] md:max-w-[320px] flex-none flex-col md:border-r border-border-subtle bg-bg-page h-full min-h-0">
 
     <!-- List header -->
     <div class="flex items-center justify-between pl-5 pr-3 pt-5 pb-1">
-        <h1 class="text-[22px] font-bold text-text-heading tracking-tight">Notes</h1>
+        <a href="{{ url_for('notes.dashboard') if current_user.is_authenticated else url_for('main.index') }}"
+            class="flex items-center gap-2 text-[21px] font-bold text-text-heading hover:opacity-80 transition-opacity tracking-tight"
+            title="NoteTakingApp">
+            <span class="w-5 h-5 rounded-md bg-accent flex items-center justify-center" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1D1D1F" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12h6m-6 4h4m-7 5h10a2 2 0 002-2V7a2 2 0 00-2-2h-2.5L11 2.5 8.5 5H6a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+            </span>
+            NoteTakingApp
+        </a>
 
         <div class="flex items-center gap-0.5">
-            {% with extra_class = "w-8 h-8 rounded-full flex items-center justify-center text-text-body hover:bg-bg-sunken transition-colors" %}
+            {% with extra_class = "w-8 h-8 rounded-full flex items-center justify-center text-text-body
+            hover:bg-bg-sunken transition-colors" %}
             {% include 'components/_theme_toggle.html' %}
             {% endwith %}
 
@@ -16,7 +28,8 @@
                     title="{{ greeting }}" aria-label="Account menu">
                     {{ (current_user.full_name[0] if current_user.full_name else 'U')|upper }}
                 </summary>
-                <div class="absolute right-0 mt-2 w-48 bg-bg-surface border border-border-subtle rounded-lg shadow-lg py-1.5 z-30 text-sm">
+                <div
+                    class="absolute right-0 mt-2 w-48 bg-bg-surface border border-border-subtle rounded-lg shadow-lg py-1.5 z-30 text-sm">
                     <a href="{{ url_for('auth.change_password') }}"
                         class="block px-4 py-2 text-text-body hover:bg-bg-sunken transition-colors">Change Password</a>
                     <a href="{{ url_for('auth.logout') }}"
@@ -43,8 +56,7 @@
                 <circle cx="11" cy="11" r="8" />
                 <path stroke-linecap="round" d="M21 21l-4.35-4.35" />
             </svg>
-            <input type="text" name="q" id="search-input" value="{{ q or '' }}" placeholder="Search"
-                autocomplete="off"
+            <input type="text" name="q" id="search-input" value="{{ q or '' }}" placeholder="Search" autocomplete="off"
                 class="w-full bg-bg-sunken rounded-[9px] pl-8 pr-8 py-[7px] text-[14px] text-text-body placeholder:text-text-faint border border-transparent focus:outline-none focus:bg-bg-surface focus:border-border-focus/40 focus-visible:ring-2 focus-visible:ring-border-focus/40 transition-colors">
             {% if q %}
             <a href="{{ url_for('notes.dashboard') }}" aria-label="Clear search"
@@ -112,8 +124,16 @@
         {% endif %}
     </div>
 
-    <!-- Footer count -->
-    <div class="border-t border-border-subtle py-2 text-center text-[12px] text-text-muted">
-        {{ notes|length }} Note{{ '' if notes|length == 1 else 's' }}
+    <!-- Footer -->
+    <div
+        class="border-t border-border-subtle py-2 pl-4 pr-2 flex items-center justify-between text-[12px] text-text-muted">
+        <span>{{ notes|length }} Note{{ '' if notes|length == 1 else 's' }}</span>
+        <a href="{{ url_for('notes.export_all') }}" title="Export All Notes" aria-label="Export all notes"
+            class="w-7 h-7 rounded-md flex items-center justify-center text-text-muted hover:bg-bg-sunken hover:text-text-body transition-colors">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+        </a>
     </div>
 </div>
